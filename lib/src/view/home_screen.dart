@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:movie/src/core/api_response.dart';
-import 'package:movie/src/viewmodel/main_viewmodel.dart';
-import 'package:provider/provider.dart';
+import 'package:movie/src/view/background_screen.dart';
+import 'package:movie/src/view/movie_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -11,32 +10,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
-  initState(){
-    Provider.of<MainViewModel>(context ,listen: false).fetPopular();
-    super.initState();
-  }
+  ScrollController backgroundScrollController = ScrollController();
+  ScrollController movieScrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
+    movieScrollController.addListener(() {
+      backgroundScrollController.jumpTo(
+          movieScrollController.offset
+      );
+    });
     return Scaffold(
-      body: Consumer<MainViewModel>(builder: (context,data,child){
-        if(data.response.status == Status.LOADING){
-           return CircularProgressIndicator();
-        }
-        if(data.response.status == Status.SUCCESS){
-          return ListView.builder(
-            itemCount: data.movies.length,
-              itemBuilder: (context,index){
-                return Text(data.movies[index].title);
-          });
-        }
-        if(data.response.status == Status.ERROR){
-          return Center(
-            child: Text(data.response.message!),
-          );
-        }
-        return Container(color: Colors.red,);
-      },),
+      appBar: AppBar(),
+      body: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          BackgroundScreen(controller: backgroundScrollController),
+        ],
+      ),
     );
   }
 }

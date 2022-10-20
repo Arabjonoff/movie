@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie/src/view/home_screen.dart';
+import 'package:movie/src/view/movie_screen.dart';
 import 'package:movie/src/viewmodel/main_viewmodel.dart';
 import 'package:provider/provider.dart';
 
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: HomeScreen()
+      home: MovieScreen()
     );
   }
 }
